@@ -89,7 +89,7 @@ def create_app(test_config=None):
         {
             "success": True,
             "questions": current_questions,
-            "total_questions": [q.format() for q in selection],
+            "total_questions": len(selection),
             "categories": categories,
             "current_category": None # not used in the app so returning None for now
         }
