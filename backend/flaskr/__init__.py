@@ -41,14 +41,14 @@ def create_app(test_config=None):
       return response
 
   '''
-  @TODO: 
+  TODO: 
   Create an endpoint to handle GET requests 
   for all available categories.
   '''
 
   def get_all_categories():
     categories = Category.query.order_by(Category.id).all()
-    return [c.format() for c in categories];
+    return {category.id: category.type for category in categories};
 
   @app.route("/categories")
   def get_categories():
@@ -66,7 +66,7 @@ def create_app(test_config=None):
 
 
   '''
-  @TODO: 
+  TODO: 
   Create an endpoint to handle GET requests for questions, 
   including pagination (every 10 questions). 
   This endpoint should return a list of questions, 

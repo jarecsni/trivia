@@ -21,14 +21,6 @@ class QuestionView extends Component {
     this.getQuestions();
   }
 
-  transformCategories(categories) {
-    const result = [];
-    categories.forEach(category => {
-      result[category.id] = category.type;
-    }) 
-    return result;
-  }
-
   getQuestions = () => {
     $.ajax({
       url: `/questions?page=${this.state.page}`, //TODO: update request URL
@@ -37,7 +29,7 @@ class QuestionView extends Component {
         this.setState({
           questions: result.questions,
           totalQuestions: result.total_questions,
-          categories: this.transformCategories(result.categories),
+          categories: result.categories,
           currentCategory: result.current_category
         })
       },
