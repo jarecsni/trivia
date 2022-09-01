@@ -191,15 +191,34 @@ def create_app(test_config=None):
   only question that include that string within their question. 
   Try using the word "title" to start. 
   '''
+  # its covered by the questions endpoint (see above)
 
   '''
-  @TODO: 
+  TODO: 
   Create a GET endpoint to get questions based on category. 
 
   TEST: In the "List" tab / main screen, clicking on one of the 
   categories in the left column will cause only questions of that 
   category to be shown. 
   '''
+  @app.route('/categories/<int:category_id>/questions', methods=['GET'])
+  def get_category_questions(category_id):
+    try:
+        questions = Question.query.filter(Question.category == category_id).all()
+
+        current_questions = paginate_questions(request, questions)
+
+        return jsonify(
+            {
+                "success": True,
+                "questions": current_questions,
+                "total_questions": len(current_questions),
+            }
+        )
+
+    except:
+        abort(422)
+
 
 
   '''
@@ -213,6 +232,34 @@ def create_app(test_config=None):
   one question at a time is displayed, the user is allowed to answer
   and shown whether they were correct or not. 
   '''
+  @app.route('/quizzes', methods=['POST'])
+  def quizzes():
+    try:
+
+        body = request.get_json()
+
+        category = body.get('quiz_category', None)
+        previous_questions = body.get('previous_questions', None)
+
+        if (category == None and previous_questions == None):
+            abort(422)
+
+        available_questions = Question.query
+        if category['type'] != 'click':
+            available_questions = available_questions.filter_by(category=category['id'])
+        
+        available_questions = available_questions.filter(Question.id.notin_((previous_questions))).all()
+        start = 0
+        stop = len(available_questions)
+        question = available_questions[random.randrange(start, stop)].format() if len(available_questions) > 0 else None
+
+        return jsonify({
+            'success': True,
+            'question': question
+        })
+    except Exception as e:
+        print('****', e)
+        abort(422)
 
   '''
   @TODO: 
