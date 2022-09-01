@@ -146,7 +146,7 @@ def create_app(test_config=None):
     new_difficulty = body.get("difficulty", None)
     new_category = body.get("category", None)
 
-    search = body.get("search", None)
+    search = body.get("searchTerm", None)
 
     try:
         if search:
@@ -182,7 +182,7 @@ def create_app(test_config=None):
         abort(422)
 
   '''
-  @TODO: 
+  TODO: 
   Create a POST endpoint to get questions based on a search term. 
   It should return any questions for whom the search term 
   is a substring of the question. 
