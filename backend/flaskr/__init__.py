@@ -258,14 +258,22 @@ def create_app(test_config=None):
             'question': question
         })
     except Exception as e:
-        print('****', e)
         abort(422)
 
   '''
-  @TODO: 
+  TODO: 
   Create error handlers for all expected errors 
   including 404 and 422. 
   '''
+  @app.errorhandler(404)
+  @app.errorhandler(422)
+  def handle_404_error(error):
+    return jsonify({
+        "success": False,
+        "error": error.code,
+        "message": error.description
+    })
+
   
   return app
 
