@@ -124,11 +124,11 @@ def create_app(test_config=None):
             }
         )
 
-    except:
-        abort(422)
+    except Exception as ex:
+        abort(ex.code if ex.code is not None else 422)
 
   '''
-  @TODO: 
+  TODO: 
   Create an endpoint to POST a new question, 
   which will require the question and answer text, 
   category, and difficulty score.
@@ -201,7 +201,7 @@ def create_app(test_config=None):
   categories in the left column will cause only questions of that 
   category to be shown. 
   '''
-  @app.route('/categories/<int:category_id>/questions', methods=['GET'])
+  @app.route('/categories/<string:category_id>/questions', methods=['GET'])
   def get_category_questions(category_id):
     try:
         questions = Question.query.filter(Question.category == category_id).all()
@@ -216,7 +216,8 @@ def create_app(test_config=None):
             }
         )
 
-    except:
+    except Exception as exc:
+        print('-----', exc)
         abort(422)
 
 
@@ -270,11 +271,14 @@ def create_app(test_config=None):
   @app.errorhandler(422)
   @app.errorhandler(500)
   def handle_404_error(error):
-    return jsonify({
-        "success": False,
-        "error": error.code,
-        "message": error.description
-    })
+    return (
+        jsonify({
+            "success": False,
+            "error": error.code,
+            "message": error.description
+        }),
+        error.code
+    )
 
   
   return app
