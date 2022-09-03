@@ -146,6 +146,25 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertEqual(len(data["questions"]), 0)
 
+    # -------------------------------
+    # /quizzes (POST)
+    # -------------------------------
+    def test_error_is_returned_for_empty_request_body(self):
+        res = self.client().post("/quizzes")
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 422)
+
+    def test_quiz_question_returned_with_no_previous_question(self):
+        res = self.client().post("/quizzes", json={
+            'quiz_category': {'type':'Science', 'id': '1'},
+            'previous_questions': []
+        })
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data['question'])
+        self.assertTrue(data['success'])
+
+
 
 # Make the tests conveniently executable
 if __name__ == "__main__":

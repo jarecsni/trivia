@@ -250,6 +250,7 @@ def create_app(test_config=None):
             available_questions = available_questions.filter_by(category=category['id'])
         
         available_questions = available_questions.filter(Question.id.notin_((previous_questions))).all()
+    
         start = 0
         stop = len(available_questions)
         question = available_questions[random.randrange(start, stop)].format() if len(available_questions) > 0 else None
@@ -258,7 +259,7 @@ def create_app(test_config=None):
             'success': True,
             'question': question
         })
-    except Exception as e:
+    except:
         abort(422)
 
   '''
