@@ -106,6 +106,6 @@ To run the tests, run
 ```
 dropdb trivia_test
 createdb trivia_test
-psql trivia_test < trivia.psql
 python test_flaskr.py
 ```
+NOTE: There's no need to manually run the trivia.psql script, the unit tests are completely standalone and they load the data before each test.
